@@ -86,38 +86,8 @@ public class DemoResource {
         SetupTestUsers.populateUsers();
        return "You have been populated";
     }
+/*
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("fetchSingle")
-    public String fetchSingle() throws IOException {
-    String response = HttpUtils.fetchData("https://catfact.ninja/fact");
-        CatDTO catDTO = gson.fromJson(response,CatDTO.class);
-        return gson.toJson(catDTO);
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("fetchSeq")
-    @RolesAllowed("user")
-    public String fetchSequentially() throws IOException {
-        LocalTime begin = LocalTime.now();
-        String cat = HttpUtils.fetchData("https://catfact.ninja/fact");
-        String boredom = HttpUtils.fetchData("https://www.boredapi.com/api/activity");
-        String dog = HttpUtils.fetchData("https://dog.ceo/api/breeds/image/random");
-        String ip = HttpUtils.fetchData("https://api.ipify.org/?format=json");
-        CatDTO catDTO = gson.fromJson(cat,CatDTO.class);
-        BoredomDTO boredomDTO = gson.fromJson(boredom,BoredomDTO.class);
-        DogDTO dogDTO = gson.fromJson(dog,DogDTO.class);
-        IpDTO ipDTO = gson.fromJson(ip,IpDTO.class);
-
-        CombinedDTO combinedDTO = new CombinedDTO(boredomDTO,catDTO,dogDTO,ipDTO);
-
-        LocalTime end = LocalTime.now();
-        long result = ChronoUnit.MILLIS.between(begin,end);
-
-
-        return gson.toJson(combinedDTO) /*+ "sequantially fetch: " +  result*/;    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -138,10 +108,6 @@ public class DemoResource {
         IpDTO ipDTO = null;
         CombinedDTO combinedDTO = null;
 
-/*
-WebApplicationException(String message, int status)
-Construct a new instance with a blank message and specified HTTP status code.
-*/
  try {
 
 
@@ -161,4 +127,5 @@ Construct a new instance with a blank message and specified HTTP status code.
 
         return gson.toJson(combinedDTO);
     }
+    */
 }

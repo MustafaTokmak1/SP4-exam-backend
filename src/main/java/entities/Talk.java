@@ -1,10 +1,16 @@
 package entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "talk")
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Talk.deleteAllRows", query = "DELETE from Talk"),
+        @NamedQuery(name = "Talk.getAllRows", query = "SELECT t from Talk t"),
+        @NamedQuery(name = "Talk.getTalk", query = "SELECT t from Talk t WHERE t.topic = :t")
+})
 public class Talk {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +36,10 @@ public class Talk {
     @ManyToOne
     private Conference conference;
 
-    public Talk(String topic, int duration, List<Speaker> speakers, Conference conference) {
+    public Talk(String topic, int duration) {
         this.topic = topic;
         this.duration = duration;
-        this.speakers = speakers;
-        this.conference = conference;
+        this.speakers = new ArrayList<>();
     }
 
     public Talk() {

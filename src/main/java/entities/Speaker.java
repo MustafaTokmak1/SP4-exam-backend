@@ -1,10 +1,16 @@
 package entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "speaker")
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Speaker.deleteAllRows", query = "DELETE from Speaker"),
+        @NamedQuery(name = "Speaker.getAllRows", query = "SELECT s from Speaker s"),
+        @NamedQuery(name = "Speaker.getSpeaker", query = "SELECT s from Speaker s WHERE s.name = :s")
+})
 public class Speaker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +29,20 @@ public class Speaker {
     @ManyToMany(mappedBy = "speakers", cascade = CascadeType.PERSIST)
     private List<Talk> talks;
 
-    public Speaker(String name, String profesion, String gender, List<Talk> talks) {
+    public Speaker(String name, String profesion, String gender) {
         this.name = name;
         this.profesion = profesion;
         this.gender = gender;
-        this.talks = talks;
+        this.talks = new ArrayList<>();
     }
 
     public Speaker() {
+    }
+    public void addTalkToSpeaker(Talk talk){
+        if (talk != null){
+            this.talks.add(talk);
+            talk.getSpeakers().add(this);
+        }
     }
 
     public String getName() {
