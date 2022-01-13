@@ -120,5 +120,13 @@ public class TalkResource {
             throw new WebApplicationException(e.getMessage());
         }
     }
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/connectTalkToSpeaker/{speakerId}")
+    public String connectTalkToSpeaker(@PathParam("speakerId") String speakerId, String boatId){
+
+            talkFacade.connectTalkToSpeaker(speakerId,boatId);
+            return "";
+    }
 }
 

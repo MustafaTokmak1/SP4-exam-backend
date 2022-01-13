@@ -201,4 +201,35 @@ public class TalkFacade {
             em.close();
         }
     }
+    public TalkDTO connectTalkToSpeaker(String speakerId, String talkIdJSON) {
+        EntityManager em = emf.createEntityManager();
+
+
+        int speakerIdInt;
+        int talkIdInt;
+
+        try {
+            speakerIdInt = Integer.parseInt(speakerId);
+            JsonObject json = JsonParser.parseString(talkIdJSON).getAsJsonObject();
+            talkIdInt = json.get("talkId").getAsInt();
+        } catch (Exception e) {
+            // throw new WebApplicationException("Malformed JSON Suplied", 400);
+            throw new WebApplicationException(e.getMessage(), 400);
+        }
+
+        try {
+            Speaker speaker = em.find(Speaker.class,speakerIdInt);
+            Talk talk = em.find(Talk.class,talkIdInt);
+            speaker.addTalkToSpeaker(talk);
+            em.getTransaction().begin();
+            em.persist(speaker);
+            em.getTransaction().commit();
+            return new TalkDTO(talk);
+        } catch (RuntimeException e) {
+            throw new WebApplicationException(e.getMessage());
+        } finally {
+            em.close();
+        }
+
+    }
 }
