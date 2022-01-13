@@ -1,5 +1,8 @@
 package facades;
 
+import entities.Conference;
+import entities.Speaker;
+import entities.Talk;
 import utils.EMF_Creator;
 import entities.RenameMe;
 import javax.persistence.EntityManager;
@@ -16,7 +19,14 @@ import org.junit.jupiter.api.Test;
 public class FacadeExampleTest {
 
     private static EntityManagerFactory emf;
-    private static FacadeExample facade;
+    private static TalkFacade facade;
+    private Talk t1 = new Talk("Soccer", 90);
+    private Talk t2 = new Talk("Basket", 90);
+    private Conference c1 = new Conference("ESB", "Testroad 23", 2000);
+    private Conference c2 = new Conference("Walt Disney Conference Center", "Testway 31", 3200);
+    private Speaker s1 = new Speaker("Charles", "SoccerPlayer", "male");
+    private Speaker s2 = new Speaker("Kevin", "BasketballPlayer", "male");
+    private Speaker s3 = new Speaker("David", "Health Specialist", "male");
 
     public FacadeExampleTest() {
     }
@@ -24,7 +34,7 @@ public class FacadeExampleTest {
     @BeforeAll
     public static void setUpClass() {
        emf = EMF_Creator.createEntityManagerFactoryForTest();
-       facade = FacadeExample.getFacadeExample(emf);
+       facade = TalkFacade.getFacade(emf);
     }
 
     @AfterAll
@@ -39,9 +49,25 @@ public class FacadeExampleTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("RenameMe.deleteAllRows").executeUpdate();
-            em.persist(new RenameMe("Some txt", "More text"));
-            em.persist(new RenameMe("aaa", "bbb"));
+            em.createNamedQuery("Talk.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Conference.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Speaker.deleteAllRows").executeUpdate();
+
+            em.persist(t1);
+            em.persist(t2);
+
+
+            s1.addTalkToSpeaker(t1);
+            s2.addTalkToSpeaker(t2);
+
+            c1.addTalk(t1);
+            c2.addTalk(t2);
+            em.persist(t1);
+            em.persist(t2);
+            em.persist(s1);
+            em.persist(s2);
+            em.persist(c1);
+            em.persist(c2);
 
             em.getTransaction().commit();
         } finally {
@@ -57,7 +83,7 @@ public class FacadeExampleTest {
     // TODO: Delete or change this method 
     @Test
     public void testAFacadeMethod() throws Exception {
-        assertEquals(2, facade.getRenameMeCount(), "Expects two rows in the database");
+        assertEquals(2, facade.getAllConferences().size(), "Expects two rows in the database");
     }
     
 

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import dtos.ConferenceDTO;
 import facades.TalkFacade;
 import utils.EMF_Creator;
+import utils.SetupTestUsers;
 
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.GET;
@@ -28,6 +29,14 @@ public class TalkResource {
 
     @Context
     SecurityContext securityContext;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("populateDB")
+    public String populate() {
+        talkFacade.populateDB();
+        return "DB has been populated";
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
