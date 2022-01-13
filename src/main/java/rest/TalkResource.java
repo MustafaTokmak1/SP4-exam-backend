@@ -43,7 +43,7 @@ public class TalkResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("user")
+    //@RolesAllowed("user")
     @Path("conferences")
     public String getAllConferences() {
         List<ConferenceDTO> conferenceDTOS = talkFacade.getAllConferences();
@@ -59,19 +59,6 @@ public class TalkResource {
         return gson.toJson(speakerDTOS);
     }
 
-    /*@Path("/talks{id}")
-    //@RolesAllowed("user")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getAllTalksByConferenceId(@PathParam("id") int conferenceId) {
-        //try {
-            List<TalkDTO> talkDTOS = talkFacade.getAllTalksByConferenceId(conferenceId);
-            return gson.toJson(talkDTOS);
-       // } catch (WebApplicationException ex) {
-          //  String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
-          //  return errorString;
-       // }
-    }*/
     @Path("/talksByConf/{id}")
     //@RolesAllowed("user")
     @GET
