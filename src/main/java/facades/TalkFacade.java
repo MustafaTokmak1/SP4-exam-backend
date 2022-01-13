@@ -1,14 +1,17 @@
 package facades;
 
 import dtos.ConferenceDTO;
+import dtos.TalkDTO;
 import entities.Conference;
 import entities.Speaker;
 import entities.Talk;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.WebApplicationException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class TalkFacade {
@@ -78,5 +81,26 @@ public class TalkFacade {
             conferenceDTOS.add(new ConferenceDTO(currentConference));
         }
         return conferenceDTOS;
+    }
+
+    public List<TalkDTO> getAllTalksByConferenceId(String conferenceIdAsString) throws WebApplicationException {
+        int conferenceId = Integer.parseInt(conferenceIdAsString);
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Talk> query = em.createQuery("SELECT t FROM Talk t where t.conference.id = :id", Talk.class);
+            query.setParameter("id", conferenceId);
+            List<Talk> talks = query.getResultList();
+            System.out.println(talks.size());
+            ArrayList<TalkDTO> talkDTOS = new ArrayList<>();
+            for (Talk t : talks) {
+                System.out.println(t.getId() + " " + t.getTopic());
+                talkDTOS.add(new TalkDTO(t));
+            }
+            return talkDTOS;
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
+        } finally {
+            em.close();
+        }
     }
 }

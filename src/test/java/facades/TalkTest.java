@@ -82,9 +82,19 @@ public class TalkTest {
 
     @Test
     //US1
-    public void getAllConferences() throws Exception {
+    public void testGetAllConferences() throws Exception {
         assertEquals(2, facade.getAllConferences().size(), "Expects two rows in the database");
     }
+
+    @Test
+    //US2
+    public void testGetAllTalksByConferenceId() {
+        String id = String.valueOf(c1.getId());
+        assertEquals(1, facade.getAllTalksByConferenceId(id).size(), "Expects one rows in the database");
+    }
+
+
+
 
 
 }
