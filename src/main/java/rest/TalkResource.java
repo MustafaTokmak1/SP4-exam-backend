@@ -3,7 +3,9 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.ConferenceDTO;
+import dtos.SpeakerDTO;
 import dtos.TalkDTO;
+import entities.Talk;
 import facades.TalkFacade;
 import utils.EMF_Creator;
 import utils.SetupTestUsers;
@@ -83,6 +85,39 @@ public class TalkResource {
         } catch (WebApplicationException ex) {
             String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
             return errorString;
+        }
+    }
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/createTalk")
+    public String createTalk(String JSONtalk){
+        try {
+            TalkDTO talkDTO = talkFacade.createTalk(JSONtalk);
+            return gson.toJson(talkDTO);
+        }catch(WebApplicationException e){
+            throw new WebApplicationException(e.getMessage());
+        }
+    }
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/createConference")
+    public String createConference(String JSONconference){
+        try {
+            ConferenceDTO conferenceDTO = talkFacade.createConference(JSONconference);
+            return gson.toJson(conferenceDTO);
+        }catch(WebApplicationException e){
+            throw new WebApplicationException(e.getMessage());
+        }
+    }
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/createSpeaker")
+    public String createSpeaker(String JSONspeaker){
+        try {
+            SpeakerDTO speakerDTO = talkFacade.createSpeaker(JSONspeaker);
+            return gson.toJson(speakerDTO);
+        }catch(WebApplicationException e){
+            throw new WebApplicationException(e.getMessage());
         }
     }
 }

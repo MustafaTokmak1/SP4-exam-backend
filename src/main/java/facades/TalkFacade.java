@@ -1,6 +1,9 @@
 package facades;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dtos.ConferenceDTO;
+import dtos.SpeakerDTO;
 import dtos.TalkDTO;
 import entities.Conference;
 import entities.Speaker;
@@ -124,5 +127,78 @@ public class TalkFacade {
             talkDTOS.add(talkDTO);
         }
         return talkDTOS;
+    }
+    public TalkDTO createTalk(String talkJSON) {
+        EntityManager em = emf.createEntityManager();
+        String topic;
+        int duration;
+        try {
+            JsonObject json = JsonParser.parseString(talkJSON).getAsJsonObject();
+            topic = json.get("topic").getAsString();
+            duration = json.get("duration").getAsInt();
+        } catch (Exception e) {
+            throw new WebApplicationException(e.getMessage(), 400);
+        }
+        try {
+            Talk talk = new Talk(topic, duration);
+            em.getTransaction().begin();
+            em.persist(talk);
+            em.getTransaction().commit();
+            return new TalkDTO(talk);
+        } catch (RuntimeException e) {
+            throw new WebApplicationException(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+    public ConferenceDTO createConference(String conferenceJSON) {
+        EntityManager em = emf.createEntityManager();
+        String name;
+        String location;
+        int capacity;
+        try {
+            JsonObject json = JsonParser.parseString(conferenceJSON).getAsJsonObject();
+            name = json.get("name").getAsString();
+            location = json.get("location").getAsString();
+            capacity = json.get("capacity").getAsInt();
+        } catch (Exception e) {
+            throw new WebApplicationException(e.getMessage(), 400);
+        }
+        try {
+            Conference conference = new Conference(name,location,capacity);
+            em.getTransaction().begin();
+            em.persist(conference);
+            em.getTransaction().commit();
+            return new ConferenceDTO(conference);
+        } catch (RuntimeException e) {
+            throw new WebApplicationException(e.getMessage());
+        } finally {
+            em.close();
+        }
+    }
+    public SpeakerDTO createSpeaker(String speakerJSON) {
+        EntityManager em = emf.createEntityManager();
+        String name;
+        String profession;
+        String gender;
+        try {
+            JsonObject json = JsonParser.parseString(speakerJSON).getAsJsonObject();
+            name = json.get("name").getAsString();
+            profession = json.get("profession").getAsString();
+            gender = json.get("gender").getAsString();
+        } catch (Exception e) {
+            throw new WebApplicationException(e.getMessage(), 400);
+        }
+        try {
+            Speaker speaker = new Speaker(name,profession,gender);
+            em.getTransaction().begin();
+            em.persist(speaker);
+            em.getTransaction().commit();
+            return new SpeakerDTO(speaker);
+        } catch (RuntimeException e) {
+            throw new WebApplicationException(e.getMessage());
+        } finally {
+            em.close();
+        }
     }
 }
