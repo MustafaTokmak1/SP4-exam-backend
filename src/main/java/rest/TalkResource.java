@@ -59,7 +59,7 @@ public class TalkResource {
           //  return errorString;
        // }
     }*/
-    @Path("/talks/{id}")
+    @Path("/talksByConf/{id}")
     //@RolesAllowed("user")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -71,6 +71,19 @@ public class TalkResource {
             String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
             return errorString;
          }
+    }
+    @Path("/talksBySpeaker/{id}")
+    //@RolesAllowed("user")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getAllTalksBySpeakerId(@PathParam("id") String id) {
+        try {
+            List<TalkDTO> talkDTOS = talkFacade.getAllTalksBySpeakerId(id);
+            return gson.toJson(talkDTOS);
+        } catch (WebApplicationException ex) {
+            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+            return errorString;
+        }
     }
 }
 

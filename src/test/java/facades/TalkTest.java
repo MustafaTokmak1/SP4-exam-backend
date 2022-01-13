@@ -59,6 +59,8 @@ public class TalkTest {
 
             s1.addTalkToSpeaker(t1);
             s2.addTalkToSpeaker(t2);
+            s3.addTalkToSpeaker(t1);
+            s3.addTalkToSpeaker(t2);
 
             c1.addTalk(t1);
             c2.addTalk(t2);
@@ -93,7 +95,12 @@ public class TalkTest {
         assertEquals(1, facade.getAllTalksByConferenceId(id).size(), "Expects one rows in the database");
     }
 
-
+    @Test
+    //US3
+    public void testGetAllTalksBySpeaker() {
+        String id = String.valueOf(s3.getId());
+        assertEquals(2, facade.getAllTalksBySpeakerId(id).size(), "Expects one rows in the database");
+    }
 
 
 
