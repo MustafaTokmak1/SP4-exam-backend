@@ -43,10 +43,20 @@ public class TalkResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("user")
     @Path("conferences")
     public String getAllConferences() {
         List<ConferenceDTO> conferenceDTOS = talkFacade.getAllConferences();
         return gson.toJson(conferenceDTOS);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("user")
+    @Path("speakers")
+    public String getAllSpeakers() {
+        List<SpeakerDTO> speakerDTOS = talkFacade.getAllSpeakers();
+        return gson.toJson(speakerDTOS);
     }
 
     /*@Path("/talks{id}")

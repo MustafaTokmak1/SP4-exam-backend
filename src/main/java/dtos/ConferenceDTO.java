@@ -5,11 +5,13 @@ import entities.Conference;
 import javax.persistence.Column;
 
 public class ConferenceDTO {
+    private int id;
     private String name;
     private String location;
     private int capacity;
 
     public ConferenceDTO(Conference conference){
+        this.id = conference.getId();
         this.name = conference.getName();
         this.location = conference.getLocation();
         this.capacity = conference.getCapacity();

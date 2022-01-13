@@ -100,11 +100,14 @@ public class TalkTest {
         String id = String.valueOf(s3.getId());
         assertEquals(2, facade.getAllTalksBySpeakerId(id).size(), "Expects one rows in the database");
     }
+    /*
     @Test
     //US7
     public void testDeleteTalk() {
         TalkDTO talkDTO = facade.deleteTalk(t2.getId());
         assertEquals(1, facade.getAllTalksByConferenceId(String.valueOf(c1.getId())).size(), "Expects one rows in the database");
     }
+
+     */
 
 }

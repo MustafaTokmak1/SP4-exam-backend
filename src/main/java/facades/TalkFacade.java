@@ -290,4 +290,17 @@ public class TalkFacade {
             em.close();
         }
     }
+
+    public List<SpeakerDTO> getAllSpeakers() {
+        EntityManager em = emf.createEntityManager();
+        List<Speaker> speakers = em.createQuery("select s FROM Speaker s", Speaker.class).getResultList();
+        if (speakers == null){
+            throw new WebApplicationException("No conferences were found",404);
+        }
+        List<SpeakerDTO> speakerDTOS = new ArrayList<>();
+        for (Speaker currentSpeaker : speakers) {
+            speakerDTOS.add(new SpeakerDTO(currentSpeaker));
+        }
+        return speakerDTOS;
+    }
 }
