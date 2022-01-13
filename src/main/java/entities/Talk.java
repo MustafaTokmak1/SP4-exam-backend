@@ -94,4 +94,13 @@ public class Talk {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public void addSpeaker(Speaker speaker){
+        this.speakers.add(speaker);
+        if(speaker != null){
+            List<Talk> talks = new ArrayList<>();
+            talks.add(this);
+            speaker.setTalks(talks);
+        }
+    }
 }

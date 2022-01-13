@@ -1,5 +1,7 @@
 package entities;
 
+import dtos.SpeakerDTO;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,13 @@ public class Speaker {
 
     public Speaker() {
     }
+
+    public Speaker(SpeakerDTO speakerDTO){
+    this.name = speakerDTO.getName();
+    this.profesion = speakerDTO.getProfession();
+    this.gender = speakerDTO.getGender();
+    }
+
     public void addTalkToSpeaker(Talk talk){
         if (talk != null){
             this.talks.add(talk);

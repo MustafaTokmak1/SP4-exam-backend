@@ -232,4 +232,62 @@ public class TalkFacade {
         }
 
     }
+    public TalkDTO editTalk(TalkDTO talkDTO) {
+        EntityManager em = emf.createEntityManager();
+        Talk editTalk = em.find(Talk.class, talkDTO.getId());
+        //System.out.println(talkDTO.getSpeakers().size());
+        if (editTalk == null) {
+            throw new WebApplicationException(String.format("Talk with id: (%d) not found", talkDTO.getId()),
+                    400);
+        }
+
+        editTalk.setTopic(talkDTO.getTopic());
+        editTalk.setDuration(talkDTO.getDuration());
+
+        // Edit speakers
+        if(talkDTO.getSpeakers() != null) {
+            for (int i = 0; i < talkDTO.getSpeakers().size(); i++) {
+                SpeakerDTO speakerDTO = talkDTO.getSpeakers().get(i);
+                try {
+                    Speaker speaker = editTalk.getSpeakers().get(i);
+                    speaker.setName(speakerDTO.getName());
+                    speaker.setProfesion(speakerDTO.getProfession());
+                    speaker.setGender(speakerDTO.getGender());
+                } catch (IndexOutOfBoundsException e) {
+                    //If a speaker that doesnt already exist has been added, this will be thrown
+                    editTalk.addSpeaker(new Speaker(speakerDTO));
+                }
+            }
+        }
+        // create a new conference
+        if(talkDTO.getConferenceDTO() != null){
+        Conference conference = new Conference(talkDTO.getConferenceDTO().getName(), talkDTO.getConferenceDTO().getLocation(),talkDTO.getConferenceDTO().getCapacity());
+
+        editTalk.setConference(conference);}
+
+        try {
+            em.getTransaction().begin();
+            em.merge(editTalk);
+            em.getTransaction().commit();
+            return new TalkDTO(editTalk);
+        } finally {
+            em.close();
+        }
+    }
+    public TalkDTO deleteTalk(int talkId) throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Talk talk = em.find(Talk.class, talkId);
+            em.remove(talk);
+            em.getTransaction().commit();
+            return new TalkDTO(talk);
+        } catch (NullPointerException | IllegalArgumentException ex) {
+            throw new WebApplicationException("Could not delete, provided id: " + talkId + " does not exist", 404);
+        } catch (RuntimeException ex) {
+            throw new WebApplicationException("Internal Server Problem. We are sorry for the inconvenience", 500);
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -11,6 +11,7 @@ import utils.EMF_Creator;
 import utils.SetupTestUsers;
 
 import javax.annotation.security.RolesAllowed;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -127,6 +128,35 @@ public class TalkResource {
 
             talkFacade.connectTalkToSpeaker(speakerId,boatId);
             return "";
+    }
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/edit/{id}")
+    public String editTalk(@PathParam("id") int id, String talk){
+        try {
+            TalkDTO talkDTOEditInfo = gson.fromJson(talk, TalkDTO.class); //manual conversion
+            talkDTOEditInfo.setId(id);
+            talkDTOEditInfo = talkFacade.editTalk(talkDTOEditInfo);
+            return gson.toJson(talkDTOEditInfo);
+        } catch (WebApplicationException ex) {
+            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+            return errorString;
+        }
+    }
+    @Path("/{id}")
+    //@RolesAllowed("admin")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteTalk(@PathParam("id") int talkId) {
+        try {
+            TalkDTO talkDTO = talkFacade.deleteTalk(talkId);
+
+            return "{\"status\": \"removed\"}";
+        } catch (WebApplicationException ex) {
+            String errorString = "{\"code\": " + ex.getResponse().getStatus() + ", \"message\": \"" + ex.getMessage() + "\"}";
+            return errorString;
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.TalkDTO;
 import entities.Conference;
 import entities.Speaker;
 import entities.Talk;
@@ -60,6 +61,7 @@ public class TalkTest {
             s3.addTalkToSpeaker(t2);
 
             c1.addTalk(t1);
+            //c1.addTalk(t2); test af us7
             c2.addTalk(t2);
             em.persist(t1);
             em.persist(t2);
@@ -98,16 +100,11 @@ public class TalkTest {
         String id = String.valueOf(s3.getId());
         assertEquals(2, facade.getAllTalksBySpeakerId(id).size(), "Expects one rows in the database");
     }
-
-/*
     @Test
-    //US4
-    public void testcreateTalkSpeakerAndConference() {
-
+    //US7
+    public void testDeleteTalk() {
+        TalkDTO talkDTO = facade.deleteTalk(t2.getId());
+        assertEquals(1, facade.getAllTalksByConferenceId(String.valueOf(c1.getId())).size(), "Expects one rows in the database");
     }
-
-
- */
-
 
 }
