@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
-public class TalkTest {
+public class TalkFacadeTest {
 
     private static EntityManagerFactory emf;
     private static TalkFacade facade;
@@ -26,7 +26,7 @@ public class TalkTest {
     private Speaker s2 = new Speaker("Kevin", "BasketballPlayer", "male");
     private Speaker s3 = new Speaker("David", "Health Specialist", "male");
 
-    public TalkTest() {
+    public TalkFacadeTest() {
     }
 
     @BeforeAll

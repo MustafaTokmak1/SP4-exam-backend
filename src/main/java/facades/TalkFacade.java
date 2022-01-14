@@ -30,10 +30,6 @@ public class TalkFacade {
         }
         return instance;
     }
-/*
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }*/
 
     public void populateDB(){
             EntityManager em = emf.createEntityManager();
@@ -86,6 +82,18 @@ public class TalkFacade {
             conferenceDTOS.add(new ConferenceDTO(currentConference));
         }
         return conferenceDTOS;
+    }
+    public List<TalkDTO> getAllTalks(){
+        EntityManager em = emf.createEntityManager();
+        List<Talk> talks = em.createQuery("select t FROM Talk t", Talk.class).getResultList();
+        if (talks == null){
+            throw new WebApplicationException("No conferences were found",404);
+        }
+        List<TalkDTO> talkDTOS = new ArrayList<>();
+        for (Talk currentTalk : talks) {
+            talkDTOS.add(new TalkDTO(currentTalk));
+        }
+        return talkDTOS;
     }
 
     public List<TalkDTO> getAllTalksByConferenceId(String conferenceIdAsString) throws WebApplicationException {

@@ -34,14 +34,6 @@ public class LoginEndpointTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
-    private static TalkFacade facade;
-    private Talk t1 = new Talk("Soccer", 90);
-    private Talk t2 = new Talk("Basket", 90);
-    private Conference c1 = new Conference("ESB", "Testroad 23", 2000);
-    private Conference c2 = new Conference("Walt Disney Conference Center", "Testway 31", 3200);
-    private Speaker s1 = new Speaker("Charles", "SoccerPlayer", "male");
-    private Speaker s2 = new Speaker("Kevin", "BasketballPlayer", "male");
-    private Speaker s3 = new Speaker("David", "Health Specialist", "male");
     
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
@@ -53,7 +45,6 @@ public class LoginEndpointTest {
         //This method must be called before you request the EntityManagerFactory
         EMF_Creator.startREST_TestWithDB();
         emf = EMF_Creator.createEntityManagerFactoryForTest();
-        facade = TalkFacade.getFacade(emf);
 
         httpServer = startServer();
         //Setup RestAssured
@@ -97,29 +88,6 @@ public class LoginEndpointTest {
             em.persist(both);
             //System.out.println("Saved test data to database");
 
-
-            em.createNamedQuery("Talk.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Conference.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Speaker.deleteAllRows").executeUpdate();
-
-            em.persist(t1);
-            em.persist(t2);
-
-
-            s1.addTalkToSpeaker(t1);
-            s2.addTalkToSpeaker(t2);
-            s3.addTalkToSpeaker(t1);
-            s3.addTalkToSpeaker(t2);
-
-            c1.addTalk(t1);
-            //c1.addTalk(t2); test af us7
-            c2.addTalk(t2);
-            em.persist(t1);
-            em.persist(t2);
-            em.persist(s1);
-            em.persist(s2);
-            em.persist(c1);
-            em.persist(c2);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -172,19 +140,6 @@ public class LoginEndpointTest {
                 .get("/info/admin").then()
                 .statusCode(200)
                 .body("msg", equalTo("Hello to (admin) User: admin"));
-    }
-
-    @Test
-    public void testGetAllConferencesEndpoint() {
-        login("user", "test");
-        given()
-                .contentType("application/json")
-                .accept(ContentType.JSON)
-                .header("x-access-token", securityToken)
-                .when()
-                .get("/talk/conferences").then()
-                .statusCode(200)
-                .body("conferenceDTO", equalTo(2));
     }
 
 

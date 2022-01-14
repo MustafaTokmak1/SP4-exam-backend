@@ -52,6 +52,15 @@ public class TalkResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    //@RolesAllowed("user")
+    @Path("talks")
+    public String getAllTalks() {
+        List<TalkDTO> talkDTOS = talkFacade.getAllTalks();
+        return gson.toJson(talkDTOS);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed("user")
     @Path("speakers")
     public String getAllSpeakers() {
