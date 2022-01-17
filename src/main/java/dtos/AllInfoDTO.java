@@ -9,6 +9,7 @@ public class AllInfoDTO {
     private ConferenceDTO conference;
 
 
+
     public AllInfoDTO(TalkDTO talk, List<SpeakerDTO> speakers, ConferenceDTO conference) {
         this.talk = talk;
         this.conference = conference;
